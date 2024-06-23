@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd2c4c1d-96c7-4bd8-979c-e63807f4cc50" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/quizapp/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/quizapp/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quiz/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/quiz/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

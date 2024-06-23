@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Category, Subject, Unit, Topic, Question, QuizSession, Attempt, Leaderboard, Chapter
+from .models import User, Category, Subject, Unit, Topic, Question, QuizSession, Attempt, Leaderboard, Chapter, Quiz, Bundle, Sale
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -59,3 +59,20 @@ class ChapterAdmin(admin.ModelAdmin):
     list_display = ('name', 'subject')
     search_fields = ('name', 'subject__name')
     list_filter = ('subject',)
+
+
+
+@admin.register(Quiz)
+class QuizAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price')
+    search_fields = ('name',)
+
+@admin.register(Bundle)
+class BundleAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price')
+    search_fields = ('name',)
+
+@admin.register(Sale)
+class SaleAdmin(admin.ModelAdmin):
+    list_display = ('user', 'quiz', 'bundle', 'purchase_date')
+    search_fields = ('user__username',)

@@ -2,6 +2,10 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import Category, Subject, Unit, Topic, Question, QuizSession, Attempt, Leaderboard
 from .serializers import CategorySerializer, SubjectSerializer, UnitSerializer, TopicSerializer, QuestionSerializer, QuizSessionSerializer, AttemptSerializer, LeaderboardSerializer
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Quiz, Bundle, Sale
+from django.http import HttpResponse
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
@@ -76,3 +80,23 @@ class LeaderboardViewSet(viewsets.ReadOnlyModelViewSet):
         if period:
             return self.queryset.filter(period=period)
         return self.queryset
+
+def quiz_list(request):
+    quizzes = Quiz.objects.all()
+    return render(request, 'quiz_list.html', {'quizzes': quizzes})
+
+def bundle_list(request):
+    bundles = Bundle.objects.all()
+    return render(request, 'bundle_list.html', {'bundles': bundles})
+
+@login_required
+def purchase_quiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    Sale.objects.create(user=request.user, quiz=quiz)
+    return HttpResponse(f"Purchased quiz: {quiz.name}")
+
+@login_required
+def purchase_bundle(request, bundle_id):
+    bundle = get_object_or_404(Bundle, id=bundle_id)
+    Sale.objects.create(user=request.user, bundle=bundle)
+    return HttpResponse(f"Purchased bundle: {bundle.name}")

@@ -115,3 +115,31 @@ class Leaderboard(models.Model):
     score = models.IntegerField()
     date = models.DateField(auto_now_add=True)
     period = models.CharField(max_length=10, choices=PERIOD_CHOICES)
+
+
+class Quiz(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    questions = models.ManyToManyField(Question)
+
+    def __str__(self):
+        return self.name
+
+class Bundle(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    quizzes = models.ManyToManyField(Quiz)
+
+    def __str__(self):
+        return self.name
+
+class Sale(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.SET_NULL, null=True, blank=True)
+    bundle = models.ForeignKey(Bundle, on_delete=models.SET_NULL, null=True, blank=True)
+    purchase_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Sale {self.id} by {self.user.username}"
