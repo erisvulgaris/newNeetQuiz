@@ -76,3 +76,9 @@ class BundleAdmin(admin.ModelAdmin):
 class SaleAdmin(admin.ModelAdmin):
     list_display = ('user', 'quiz', 'bundle', 'purchase_date')
     search_fields = ('user__username',)
+
+from django.contrib import admin
+from .models import User, Subscription, Category, Subject, Unit, Chapter, Topic, Question, Quiz, Bundle, Sale
+
+
+admin.site.register(Subscription)

@@ -14,6 +14,9 @@ router.register(r'attempts', AttemptViewSet)
 router.register(r'leaderboard', LeaderboardViewSet)
 
 urlpatterns = [
+    path('purchase-subscription/', views.purchase_subscription, name='purchase_subscription'),
+    path('subscription-success/', views.subscription_success, name='subscription_success'),
+    path('quiz/<int:quiz_id>/', views.access_quiz, name='access_quiz'),
     path('api/', include(router.urls)),
     path('quizzes/', views.quiz_list, name='quiz_list'),
     path('bundles/', views.bundle_list, name='bundle_list'),

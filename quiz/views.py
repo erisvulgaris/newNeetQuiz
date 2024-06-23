@@ -7,6 +7,44 @@ from django.contrib.auth.decorators import login_required
 from .models import Quiz, Bundle, Sale
 from django.http import HttpResponse
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from .models import Subscription, Quiz, User
+
+@login_required
+def purchase_subscription(request):
+    if request.method == 'POST':
+        # Process the payment (You can use Stripe, PayPal, etc.)
+        # For simplicity, let's assume the payment is successful
+
+        subscription = Subscription.objects.create(
+            user=request.user,
+            start_date=timezone.now(),
+            end_date=timezone.now() + timezone.timedelta(days=360),
+            price=199.00  # Example price
+        )
+        request.user.is_paid = True
+        request.user.subscription_start = subscription.start_date
+        request.user.subscription_end = subscription.end_date
+        request.user.save()
+
+        return redirect('subscription_success')
+    return render(request, 'purchase_subscription.html')
+
+@login_required
+def subscription_success(request):
+    return render(request, 'subscription_success.html')
+
+@login_required
+def access_quiz(request, quiz_id):
+    quiz = Quiz.objects.get(id=quiz_id)
+    if request.user.is_paid:
+        return render(request, 'quiz_detail.html', {'quiz': quiz})
+    else:
+        return redirect('purchase_subscription')
+
+
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

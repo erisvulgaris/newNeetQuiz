@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     groups = models.ManyToManyField(
         'auth.Group',
-        related_name='quiz_users',  # Change related_name
+        related_name='quiz_users',
         blank=True,
         help_text=(
             'The groups this user belongs to. A user will get all permissions '
@@ -15,12 +15,24 @@ class User(AbstractUser):
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
-        related_name='quiz_user_permissions',  # Change related_name
+        related_name='quiz_user_permissions',
         blank=True,
         help_text='Specific permissions for this user.',
         verbose_name='user permissions',
     )
+    is_paid = models.BooleanField(default=False)  # Add a field to indicate paid users
+    subscription_start = models.DateTimeField(null=True, blank=True)
+    subscription_end = models.DateTimeField(null=True, blank=True)
 
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s subscription"
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -143,3 +155,6 @@ class Sale(models.Model):
 
     def __str__(self):
         return f"Sale {self.id} by {self.user.username}"
+
+
+
