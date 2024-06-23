@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import CategoryViewSet, SubjectViewSet, UnitViewSet, TopicViewSet, QuestionViewSet, QuizSessionViewSet, AttemptViewSet, LeaderboardViewSet
+from . import views
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
